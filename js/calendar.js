@@ -1,6 +1,6 @@
 var Calendar = function(_opts){
     var _this = this;
-    var debug = true;
+    var debug = false;
     var DAY = 24 * 60 * 60 * 1000;
     // options
     _this.opts = {
