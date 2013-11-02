@@ -4,6 +4,7 @@ var Calendar = function(_opts){
     var DAY = 24 * 60 * 60 * 1000;
     // options
     _this.opts = {
+        calID            : 'cal',
         date             : new Date(),
         tblID            : 'cal-body',
         todayID          : 'today',
@@ -483,6 +484,9 @@ var Calendar = function(_opts){
 
     // setup calendar
     this.init = function(o){
+
+        _this.generateLayout();
+
         var col = 1;
         var isFirstRow = true;
         var calStr = "Пн Вт Ср Чт Пт Сб Вс\n";
@@ -562,6 +566,33 @@ var Calendar = function(_opts){
         // show cal
         if (debug) console.log(calStr);
     }
+
+    this.generateLayout = function(){
+        // create event panel
+        var eventPanel = _this.createElement('div', {id : 'event-panel', });
+        var addEventBtn = _this.createElement('a', {
+            id : 'add-event-btn',
+            href : '#'
+        }, 'button');
+        addEventBtn.innerHTML = "Добавить";
+        var updateEventBtn = _this.createElement('a', {
+            href : '#'
+        }, 'button');
+        updateEventBtn.innerHTML = "Обновить";
+        var searchInput = _this.createElement('input', {
+            id : "search-events",
+            placeholder : "Событие, дата или участник",
+            type : "text"
+        });
+        var searchIcon = _this.createElement('img', {src : "img/search.png"}, 'search-icon');
+        eventPanel.appendChild(addEventBtn);
+        eventPanel.appendChild(updateEventBtn);
+        eventPanel.appendChild(searchInput);
+        eventPanel.appendChild(searchIcon);
+        //var calContainer = document.getElementById('cal');
+        var calContainer = document.body;
+        calContainer.insertBefore(eventPanel);
+    } 
 
     this.init(_this.opts);
 }
