@@ -26,7 +26,7 @@ var Calendar = function(_opts){
 
     _this.editedEventDate = "";
     _this.editedEventElement = null;
-    _this.calBody = document.getElementById(_this.opts.tblID);
+    //_this.calBody = document.getElementById(_this.opts.tblID);
 
     var pad = function(num, pad){
         var s = "000" + num;
@@ -484,8 +484,9 @@ var Calendar = function(_opts){
 
     // setup calendar
     this.init = function(o){
-
         _this.generateLayout();
+
+        _this.calBody = document.getElementById(_this.opts.tblID);
 
         var col = 1;
         var isFirstRow = true;
@@ -568,8 +569,12 @@ var Calendar = function(_opts){
     }
 
     this.generateLayout = function(){
+
+        var calContainer = document.getElementById(_this.opts.calID);
+        calContainer.innerHTML = "";
+
         // create event panel
-        var eventPanel = _this.createElement('div', {id : 'event-panel', });
+        var eventPanel = _this.createElement('div', {}, 'event-panel');
         var addEventBtn = _this.createElement('a', {
             id : 'add-event-btn',
             href : '#'
@@ -589,9 +594,78 @@ var Calendar = function(_opts){
         eventPanel.appendChild(updateEventBtn);
         eventPanel.appendChild(searchInput);
         eventPanel.appendChild(searchIcon);
-        //var calContainer = document.getElementById('cal');
-        var calContainer = document.body;
-        calContainer.insertBefore(eventPanel);
+        calContainer.appendChild(eventPanel);
+        // <<< panel added
+
+        // create controls panel
+        var controls = _this.createElement('div', {id : 'controls', });
+        var prevMon = _this.createElement('a',{
+            id : 'prev-month',
+            href : '#'
+        }, 'month-links');
+        var prevMonImg = _this.createElement('img', {src : "img/arr_prev.png", alt : "<<"});
+        prevMon.appendChild(prevMonImg);
+        var dateStr = _this.createElement('span', {id : 'date-str'});
+        var nextMon = _this.createElement('a',{
+            id : 'next-month',
+            href : '#'
+        }, 'month-links');
+        var nextMonImg = _this.createElement('img', {src : "img/arr_next.png", alt : ">>"});
+        nextMon.appendChild(nextMonImg);
+        var today = _this.createElement('a', {id : 'today', href : '#'});
+        today.innerHTML = "Сегодня";
+        controls.appendChild(prevMon);
+        controls.appendChild(dateStr);
+        controls.appendChild(nextMon);
+        controls.appendChild(today);
+        calContainer.appendChild(controls);
+
+        // add cal-body ;)
+        calContainer.appendChild(_this.createElement('div', {id : 'cal-body'}));
+
+        // add add-event-fast popup
+        var addEventFast = _this.createElement('div', {id : 'add-event-fast'});
+        var closeEventFast = _this.createElement('div', {id : 'close-fast-popup'}, 'close');
+        closeEventFast.innerHTML = 'x';
+        addEventFast.appendChild(closeEventFast);
+        var aefArrow = _this.createElement('div', {}, 'arrow');
+        var aefAImg = _this.createElement('img', {
+            src : 'img/up-arrow.png',
+            alt : ''
+        });
+        aefArrow.appendChild(aefAImg);
+        addEventFast.appendChild(aefArrow);
+        var eventText = _this.createElement('input', {
+            type : 'text',
+            id : 'evt-text',
+            placeholder : '5 Марта, День рождения',
+        });
+        addEventFast.appendChild(eventText);
+        var createBtn = _this.createElement('a', {
+            href : "#",
+            id : 'add-event'
+        }, 'rnd-button');
+        createBtn.innerHTML = 'Создать';
+        addEventFast.appendChild(createBtn);
+        calContainer.appendChild(addEventFast);
+
+        // add full-event
+        var fullEvent = _this.createElement('div', {id : 'full-event'});
+        var closeFullEvent = _this.createElement('div', {id : 'close-full-event'}, 'close');
+        closeFullEvent.innerHTML = 'x';
+        fullEvent.appendChild(closeFullEvent);
+        var feArrow = _this.createElement('div', {}, 'arrow');
+        var feAImg = _this.createElement('img', {
+            src : 'img/left-arrow.png',
+            alt : '<'
+        });
+        feArrow.appendChild(feAImg);
+        fullEvent.appendChild(feArrow);
+
+        var feContent = _this.createElement('div', {id : 'fe-content'});
+        fullEvent.appendChild(feContent);
+
+        calContainer.appendChild(fullEvent);
     } 
 
     this.init(_this.opts);
